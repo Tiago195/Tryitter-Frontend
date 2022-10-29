@@ -6,7 +6,7 @@ import { Button, Box, Text, Flex, Image } from '@chakra-ui/react';
 
 import logo from './logo.svg';
 
-export const Nav = () => {
+export const Nav = ({ changeRender }: any) => {
   const style = {
     flexIcons: {
       fontSize: '1.4rem',
@@ -18,7 +18,7 @@ export const Nav = () => {
     }
   };
   return (
-    <Flex flex="0.5" gap="20px" flexDirection="column" borderRight="1px" borderColor="gray.700">
+    <Flex minW="20vw" maxW="20vw" flex="0.5" gap="20px" flexDirection="column" borderRight="1px" borderColor="gray.700">
 
       <Box width="100%" padding="10px 10px 0" >
         <Box width="1.9rem">
@@ -27,17 +27,17 @@ export const Nav = () => {
       </Box>
 
       <Flex as="nav" flexDirection="column" gap="1rem" paddingLeft="10px">
-        <Flex {...style.flexIcons}>
+        <Flex cursor="pointer" {...style.flexIcons} onClick={() => { changeRender('home'); }}>
           <BiHomeSmile {...style.icon} />
           <Text>Página Inicial</Text>
         </Flex>
 
-        <Flex {...style.flexIcons}>
+        <Flex cursor="pointer" {...style.flexIcons} onClick={() => { changeRender('explore'); }}>
           <BiHash {...style.icon} />
           <Text>Explorar</Text>
         </Flex>
 
-        <Flex {...style.flexIcons}>
+        <Flex cursor="pointer" {...style.flexIcons} onClick={() => { changeRender('profile'); }}>
           <BsPerson {...style.icon} />
           <Text>Perfil</Text>
         </Flex>

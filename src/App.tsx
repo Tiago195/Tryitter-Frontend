@@ -6,6 +6,7 @@ import {
 } from '@chakra-ui/react';
 import { Nav } from './components/Nav';
 import { Home } from './components/Home';
+import { Explorer } from './components/Explorer';
 
 export const App = () => {
   const [render, setRender] = useState('home');
@@ -13,10 +14,10 @@ export const App = () => {
   return (
     <ChakraProvider theme={theme}>
       <Box display="flex" width="100vw" padding="0 3rem">
-        <Nav />
+        <Nav changeRender={setRender} />
         {render == 'home' && <Home />}
         {render == 'profile' && <Home />}
-        {render == 'explore' && <Home />}
+        {render == 'explore' && <Explorer />}
       </Box>
     </ChakraProvider>
   );

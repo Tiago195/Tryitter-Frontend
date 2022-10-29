@@ -1,18 +1,18 @@
-import { background, Box, Button, CircularProgress, CircularProgressLabel, color, Flex, FormControl, FormLabel, Grid, Input, Text, useTheme } from '@chakra-ui/react';
+import { Box, Button, CircularProgress, CircularProgressLabel, Flex, Input, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { AiOutlineEllipsis, AiOutlineHeart } from 'react-icons/ai';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 
 export const Home = () => {
-  // <ColorModeSwitcher justifySelf="flex-end" />
   // const theme = useTheme();
   const [value, setValue] = useState('');
   const trackColor = value.length >= 280 ? 'red' : 280 - value.length <= 20 ? 'yellow' : '#2FC18C';
   return (
     <Box minH="100vh" fontSize="xl" flex="2">
 
-      <Flex padding="10px">
+      <Flex padding="10px" justifyContent="space-between">
         <Text>Página inicial</Text>
+        <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>
 
       <Box display="flex" maxW="60vw" marginBottom="10px" alignItems="center" gap="10px">
