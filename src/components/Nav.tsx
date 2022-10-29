@@ -17,12 +17,10 @@ export const Nav = () => {
       fontSize: '1.8rem'
     }
   };
-  // console.log(logo.default);
   return (
-    <Flex flex="0.5" gap="20px" flexDirection="column" borderRight="1px solid red">
+    <Flex flex="0.5" gap="20px" flexDirection="column" borderRight="1px" borderColor="gray.700">
 
       <Box width="100%" padding="10px 10px 0" >
-        {/* <ReactLogo /> */}
         <Box width="1.9rem">
           <Image src={logo} color="red" />
         </Box>
@@ -46,18 +44,30 @@ export const Nav = () => {
       </Flex>
 
       <Flex width="100%">
-        <Button width="90%" padding="25px 0" textAlign="center" borderRadius="30px">Tryitar</Button>
+        <Button
+          width="90%"
+          padding="25px 0"
+          textAlign="center"
+          borderRadius="30px"
+          bg="#2FC18C" _hover={{ background: '#28a779' }}
+        >Tryitar</Button>
       </Flex>
 
       <Box textAlign="right" marginRight="13px">
-        <Button width="100%" borderRadius="30px" padding="28px 0" justifyContent="space-around">
+        <Button
+          width="100%"
+          borderRadius="30px"
+          padding="28px 0"
+          justifyContent="space-around"
+          bg="none"
+        >
 
           <Flex flexDirection="column" gap="1px" alignItems="flex-start">
             <Text>UserName</Text>
-            <Text>@User</Text>
+            <Text color="gray.500" fontWeight="100">@User</Text>
           </Flex>
 
-          <Box>
+          <Box >
             <AiOutlineEllipsis fontSize="1.5rem" />
           </Box>
 
