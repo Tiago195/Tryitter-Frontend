@@ -1,22 +1,44 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { BiHomeSmile, BiHash } from 'react-icons/bi';
 import { BsPerson } from 'react-icons/bs';
 import { AiOutlineEllipsis } from 'react-icons/ai';
-import { Button, Box, Text, Flex, Image } from '@chakra-ui/react';
+import { Button, Box, Text, Flex, Image, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 
 import logo from './logo.svg';
+import { Login } from './Login';
+import { ModalTryitar } from './ModalTryitar';
+import { IUser } from './Profile';
 
-export const Nav = ({ changeRender }: any) => {
+type Props = {
+  user: IUser,
+  setUser: Dispatch<SetStateAction<IUser>>
+}
+
+export const Nav = ({ user, setUser }: any) => {
   const style = {
     flexIcons: {
       fontSize: '1.4rem',
       gap: '10px',
       alignItems: 'center',
+      w: '80%',
+      _hover: { bg: '#0000000d' },
+      padding: '10px 5px',
+      borderRadius: '20px'
     },
     icon: {
       fontSize: '1.8rem'
     }
   };
+
+  const navigate = useNavigate();
+  const checkout = () => {
+    setUser();
+    localStorage.removeItem('user');
+    navigate('/explorer');
+  };
+  // const token = localStorage.getItem('token');
+
   return (
     <Flex minW="20vw" maxW="20vw" flex="0.5" gap="20px" flexDirection="column" borderRight="1px" borderColor="gray.700">
 
@@ -27,53 +49,68 @@ export const Nav = ({ changeRender }: any) => {
       </Box>
 
       <Flex as="nav" flexDirection="column" gap="1rem" paddingLeft="10px">
-        <Flex cursor="pointer" {...style.flexIcons} onClick={() => { changeRender('home'); }}>
-          <BiHomeSmile {...style.icon} />
-          <Text>Página Inicial</Text>
-        </Flex>
+        {user ? (
+          <>
+            <Flex cursor="pointer" {...style.flexIcons} onClick={() => navigate('/')}>
+              <BiHomeSmile {...style.icon} />
+              <Text>Página Inicial</Text>
+            </Flex>
 
-        <Flex cursor="pointer" {...style.flexIcons} onClick={() => { changeRender('explore'); }}>
-          <BiHash {...style.icon} />
-          <Text>Explorar</Text>
-        </Flex>
+            <Flex cursor="pointer" {...style.flexIcons} onClick={() => navigate('/explorer')}>
+              <BiHash {...style.icon} />
+              <Text>Explorar</Text>
+            </Flex>
 
-        <Flex cursor="pointer" {...style.flexIcons} onClick={() => { changeRender('profile'); }}>
-          <BsPerson {...style.icon} />
-          <Text>Perfil</Text>
-        </Flex>
+            <Flex cursor="pointer" {...style.flexIcons} onClick={() => navigate(`/profile/${user.arroba}`)}>
+              <BsPerson {...style.icon} />
+              <Text>Perfil</Text>
+            </Flex>
+          </>
+        )
+          : (
+            <>
+              <Flex cursor="pointer" {...style.flexIcons}  >
+                <BiHash {...style.icon} />
+                <Text>Explorar</Text>
+              </Flex>
+              <Login setUser={setUser} />
+            </>
+          )}
       </Flex>
 
-      <Flex width="100%">
-        <Button
-          width="90%"
-          padding="25px 0"
-          textAlign="center"
-          borderRadius="30px"
-          bg="#2FC18C" _hover={{ background: '#28a779' }}
-        >Tryitar</Button>
-      </Flex>
+      {user && (
+        <>
+          <ModalTryitar />
+          <Menu>
+            <Box textAlign="right" marginRight="13px" _hover={{ bg: '#0000000d' }} transition=".15s all " borderRadius="30px" p="5px 0">
+              <MenuButton
+                display="flex"
+                width="100%"
 
-      <Box textAlign="right" marginRight="13px">
-        <Button
-          width="100%"
-          borderRadius="30px"
-          padding="28px 0"
-          justifyContent="space-around"
-          bg="none"
-        >
+                justifyContent="space-around"
+                bg="none"
+              >
+                <Flex alignItems="center" justifyContent="space-around" w="100%" >
+                  <Flex flexDirection="column" gap="1px" alignItems="flex-start">
+                    <Text>{user.name}</Text>
+                    <Text color="gray.500" fontWeight="100">@{user.arroba}</Text>
+                  </Flex>
 
-          <Flex flexDirection="column" gap="1px" alignItems="flex-start">
-            <Text>UserName</Text>
-            <Text color="gray.500" fontWeight="100">@User</Text>
-          </Flex>
+                  <Box >
+                    <AiOutlineEllipsis fontSize="1.5rem" />
+                  </Box>
+                </Flex>
 
-          <Box >
-            <AiOutlineEllipsis fontSize="1.5rem" />
-          </Box>
+              </MenuButton>
+              <MenuList>
+                <MenuItem onClick={checkout}>Sair de {user.email}</MenuItem>
+              </MenuList>
+            </Box>
+          </Menu>
+        </>
+      )
+      }
 
-        </Button>
-      </Box>
-
-    </Flex>
+    </Flex >
   );
 };
