@@ -2,11 +2,11 @@ import { Box, Center, Divider, Flex, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
-import { Post, IPost } from './Post';
+import { api } from '../services/axios';
+import { Post, IPost } from '../components/Post';
 
 export interface IUser {
   arroba: string,
@@ -34,7 +34,7 @@ export const Profile = () => {
   useEffect(() => {
     (async () => {
       try {
-        const data = await (await axios.get(`http://localhost:3001/user/${arroba}`)).data;
+        const data = await (await api.get(`/user/${arroba}`)).data;
         setUser(data);
       } catch (error) {
         navigate('/notFound');
@@ -43,14 +43,14 @@ export const Profile = () => {
   }, []);
 
   return (
-    <Box minH="100vh" maxW="60vw" fontSize="xl" flex="2">
+    <Box minH="100vh" w={['100vw', '100vw', '60vw']} fontSize="xl" flex="2">
       <Flex padding="10px" justifyContent="space-between" alignItems="center">
 
         <Box display="inline-flex" gap="20px" alignItems="center">
           <BsArrowLeft fontSize="1.8rem" />
           <Box>
-            <Box display="inline-flex" gap="10px">
-              <Text>{user.name}</Text>
+            <Box display="inline-flex" gap="10px" className='profile-header'>
+              <Text >{user.name}</Text>
               <Center height='inherit'>
                 <Divider orientation='vertical' />
               </Center>
@@ -64,11 +64,11 @@ export const Profile = () => {
 
       <Box padding="10px 0">
         <Text borderBottom="1px" paddingLeft="10px" paddingBottom="5px" as="h1">Meus Tryits</Text>
-        <Box>
+        {/* <Box>
           {user.posts.map(post => (
             <Post key={post.postId} post={post} />
           ))}
-        </Box>
+        </Box> */}
       </Box>
 
     </Box>

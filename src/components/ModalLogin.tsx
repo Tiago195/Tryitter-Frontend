@@ -1,10 +1,23 @@
 import { Box, Button, FormControl, FormLabel, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useDisclosure, useToast } from '@chakra-ui/react';
-import axios from 'axios';
+import { api } from '../services/axios';
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from './logo.svg';
+import { IUser } from '../pages/Profile';
 
-export const ModalLogin = ({ view: { isOpen, onOpen, onClose }, otherView, setUser }: any) => {
+type TView = {
+  isOpen: boolean,
+  onOpen: () => void,
+  onClose: () => void,
+}
+
+type Props = {
+  view: TView
+  otherView: TView,
+  setUser: any
+}
+
+export const ModalLogin = ({ view: { isOpen, onOpen, onClose }, otherView, setUser }: Props) => {
   // const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const navigation = useNavigate();
@@ -22,14 +35,15 @@ export const ModalLogin = ({ view: { isOpen, onOpen, onClose }, otherView, setUs
       password: password.current?.value
     };
     try {
-      const data = await (await axios.post('http://localhost:3001/login', body)).data;
-      setUser((old: any) => ({ ...old, email: body.email, name: data.name, token: data.token }));
-      localStorage.setItem('user', JSON.stringify({ email: data.email, name: data.name, token: data.token }));
+      const data = await (await api.post('/login', body)).data;
+
+      setUser((user: IUser) => ({ ...user, ...data }));
+      localStorage.setItem('user', JSON.stringify(data));
       navigation('/');
       onClose();
     } catch (er) {
       const message = (er as any).response.data.message ? 'Email ou senha invalida' : `${Object.keys((er as any).response.data.errors)[0]} invalido.`;
-      console.log(er);
+
       toast({
         title: 'Erro ao fazer login',
         description: message,

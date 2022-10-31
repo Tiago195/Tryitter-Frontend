@@ -3,9 +3,21 @@ import logo from './logo.svg';
 
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '../services/axios';
 
-export const ModalSubscribe = ({ view: { isOpen, onOpen, onClose }, otherView, setUser }: any) => {
+type TView = {
+  isOpen: boolean,
+  onOpen: () => void,
+  onClose: () => void,
+}
+
+type Props = {
+  view: TView
+  otherView: TView,
+  setUser: any
+}
+
+export const ModalSubscribe = ({ view: { isOpen, onOpen, onClose }, otherView, setUser }: Props) => {
   // const {  } = useDisclosure();
   const toast = useToast();
   const navigation = useNavigate();
@@ -28,7 +40,7 @@ export const ModalSubscribe = ({ view: { isOpen, onOpen, onClose }, otherView, s
       arroba: arroba.current?.value,
     };
     try {
-      const token = await (await axios.post('http://localhost:3001/user', body)).data;
+      const token = await (await api.post('/user', body)).data;
       delete body.password;
       setUser((old: any) => ({ ...old, ...body, token }));
       localStorage.setItem('user', JSON.stringify({ ...body, token }));

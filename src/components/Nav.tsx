@@ -8,14 +8,14 @@ import { Button, Box, Text, Flex, Image, Menu, MenuButton, MenuList, MenuItem } 
 import logo from './logo.svg';
 import { Login } from './Login';
 import { ModalTryitar } from './ModalTryitar';
-import { IUser } from './Profile';
+import { IUser } from '../pages/Profile';
 
 type Props = {
   user: IUser,
-  setUser: Dispatch<SetStateAction<IUser>>
+  setUser: (user?: IUser) => void
 }
 
-export const Nav = ({ user, setUser }: any) => {
+export const Nav = ({ user, setUser }: Props) => {
   const style = {
     flexIcons: {
       fontSize: '1.4rem',
@@ -39,31 +39,32 @@ export const Nav = ({ user, setUser }: any) => {
   };
   // const token = localStorage.getItem('token');
 
+  console.log(user);
   return (
-    <Flex minW="20vw" maxW="20vw" flex="0.5" gap="20px" flexDirection="column" borderRight="1px" borderColor="gray.700">
+    <Flex className='nav' minW="20vw" maxW="20vw" flex="0.5" gap="20px" flexDirection="column" borderRight="1px" borderColor="gray.700">
 
-      <Box width="100%" padding="10px 10px 0" >
+      <Box width="100%" padding="10px 10px 0" className='nav-logo'>
         <Box width="1.9rem">
           <Image src={logo} color="red" />
         </Box>
       </Box>
 
-      <Flex as="nav" flexDirection="column" gap="1rem" paddingLeft="10px">
+      <Flex as="nav" flexDirection="column" gap="1rem" paddingLeft="10px" className='nav-icons'>
         {user ? (
           <>
             <Flex cursor="pointer" {...style.flexIcons} onClick={() => navigate('/')}>
               <BiHomeSmile {...style.icon} />
-              <Text>Página Inicial</Text>
+              <Text className='nav-texts'>Página Inicial</Text>
             </Flex>
 
             <Flex cursor="pointer" {...style.flexIcons} onClick={() => navigate('/explorer')}>
               <BiHash {...style.icon} />
-              <Text>Explorar</Text>
+              <Text className='nav-texts'>Explorar</Text>
             </Flex>
 
             <Flex cursor="pointer" {...style.flexIcons} onClick={() => navigate(`/profile/${user.arroba}`)}>
               <BsPerson {...style.icon} />
-              <Text>Perfil</Text>
+              <Text className='nav-texts'>Perfil</Text>
             </Flex>
           </>
         )
@@ -77,12 +78,11 @@ export const Nav = ({ user, setUser }: any) => {
             </>
           )}
       </Flex>
-
       {user && (
         <>
           <ModalTryitar />
-          <Menu>
-            <Box textAlign="right" marginRight="13px" _hover={{ bg: '#0000000d' }} transition=".15s all " borderRadius="30px" p="5px 0">
+          <Menu >
+            <Box className='nav-user' textAlign="right" marginRight="13px" _hover={{ bg: '#0000000d' }} transition=".15s all " borderRadius="30px" p="5px 0">
               <MenuButton
                 display="flex"
                 width="100%"

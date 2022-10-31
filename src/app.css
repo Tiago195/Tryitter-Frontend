@@ -1,0 +1,82 @@
+@media only screen and (max-width: 765px) {
+  .nav {
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    max-width: 100vw !important;
+    align-items: center;
+    padding-left: none;
+    /* height: 10vh; */
+    /* background-color: red; */
+    left: 0;
+    border-right: none !important;
+  }
+
+  .nav-icons {
+    background-color: #1a202c !important;
+    flex-direction: row !important;
+    width: 100%;
+  }
+
+  .nav-icons>div {
+    justify-content: center;
+  }
+
+  .nav-logo,
+  .nav-user,
+  .nav-texts {
+    display: none;
+  }
+
+  .nav-tryittar {
+    position: absolute;
+    border-radius: 100%;
+    right: 27px;
+    width: 50px !important;
+    height: 50px !important;
+    padding: 0px !important;
+    border: none;
+    bottom: 11vh;
+  }
+
+  .nav-tryittar-button {
+    border-radius: 100% !important;
+    padding: 0px !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .tryitter-container {
+    flex-direction: column;
+  }
+
+  .tryitter-container>textarea {
+    height: 45vh;
+  }
+
+  .tryitter-container>div {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .tryitter-container-btn {
+    width: 40vw;
+  }
+
+  .tryitter-container-btn>button {
+    width: 100%;
+  }
+
+  .chakra-modal__content {
+    margin: 0px !important;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .profile-header {
+    display: flex;
+    flex-direction: column;
+  }
+}

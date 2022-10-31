@@ -1,10 +1,12 @@
 import { Box, Button, Flex, Input, InputGroup, InputLeftElement, InputRightElement, Skeleton, Stack, Text } from '@chakra-ui/react';
 // import 'dotenv/config';
 import axios from 'axios';
+import { api } from '../services/axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { IUser } from './Profile';
 
 interface INews {
   source: {
@@ -22,7 +24,7 @@ interface INews {
 
 export const Explorer = () => {
   const [news, setNews] = useState<INews[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<IUser[]>([]);
   const [previewUsers, setPreviewUsers] = useState(false);
   const [input, setInput] = useState('');
   const navigate = useNavigate();
@@ -30,7 +32,7 @@ export const Explorer = () => {
   useEffect(() => {
     (async () => {
       // const news = await (await axios.get('https://newsapi.org/v2/top-headlines?sources=google-news-br&apiKey=f65a607c167340dd806bc49da8680942')).data;
-      const t = await (await axios.get('http://localhost:3001/user')).data;
+      const t = await (await api.get('/user')).data;
       setUsers(t);
       console.log(t);
       // setNews(news.articles);
@@ -44,7 +46,7 @@ export const Explorer = () => {
   };
 
   return (
-    <Box maxW="60vw">
+    <Box w={['100vw', '100vw', '60vw']}>
 
       <Flex padding="10px" justifyContent="space-between" >
         <InputGroup _dark={{ bg: '#353c44' }} padding="2px 20px" borderRadius="20px">
@@ -59,6 +61,7 @@ export const Explorer = () => {
 
       <Box
         h={previewUsers ? 'fit-content' : '0'}
+        w={['100vw', '100vw', '60vw']}
         transition=".5s all"
         overflow="auto"
         _light={{ bg: '#ffffff' }} _dark={{ bg: '#1a202c' }}
@@ -67,12 +70,12 @@ export const Explorer = () => {
         position="fixed" display="flex"
         flexDirection="column" zIndex="1"
         border={previewUsers ? '1px' : 'none'}
-        minW="60vw" maxH="50vh" gap="10px"
+        gap="10px"
         onMouseLeave={() => setPreviewUsers(false)}
       >
 
         {users.filter(e => e.arroba.includes(input)).map(e => (
-          <Box key={e.userId}>
+          <Box key={e.userId}  >
             <Button display="flex" flexDirection="column" alignItems="self-start" w="100%" p={3} h="fit-content" onClick={() => navigate(`/profile/${e.arroba}`)}>
               <Text fontWeight="900">{e.name}</Text>
               <Text color="gray.500" fontWeight="100">@{e.arroba}</Text>

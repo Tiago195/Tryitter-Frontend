@@ -1,16 +1,19 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
-import axios from 'axios';
+import { api } from '../services/axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // import { AiOutlineEllipsis, AiOutlineHeart } from 'react-icons/ai';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
-import { InputTryitar } from './InputTryitar';
-import { IPost, Post } from './Post';
+import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
+import { InputTryitar } from '../components/InputTryitar';
+import { IPost, Post } from '../components/Post';
+import { IUser } from './Profile';
 // import { Post } from './Post';
 
+type Props = {
+  user: IUser
+}
 
-
-export const Home = ({ user }: any) => {
+export const Home = ({ user }: Props) => {
   // const theme = useTheme();
   const [posts, setPosts] = useState<IPost[]>([]);
 
@@ -24,23 +27,28 @@ export const Home = ({ user }: any) => {
 
   useEffect(() => {
     (async () => {
-      const data = await (await axios.get('http://localhost:3001/posts')).data;
+      const data = await (await api.get('/posts')).data;
       setPosts(data);
     });
   }, []);
 
   return (
-    <Box minH="100vh" maxW="60vw" fontSize="xl" flex="2">
+    <Box minH="100vh" fontSize="xl" flex="2">
 
       <Flex padding="10px" justifyContent="space-between">
         <Text>Página inicial</Text>
         <ColorModeSwitcher justifySelf="flex-end" />
       </Flex>
-
-      <InputTryitar />
-      {posts.map(e => (
-        <Post key={e.postId} post={e} />
-      ))}
+      <Box display={['none', 'none', 'flex']}>
+        <InputTryitar />
+      </Box>
+      {/* {posts.map(e => (
+      ))} */}
+      <Post />
+      <Post />
+      <Post />
+      <Post />
+      <Post />
     </Box >
   );
 };

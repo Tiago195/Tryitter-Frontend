@@ -1,4 +1,4 @@
-import { Button, Flex, Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Flex, Modal, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { InputTryitar } from './InputTryitar';
 
@@ -7,8 +7,9 @@ export const ModalTryitar = () => {
   const user = JSON.parse(localStorage.getItem('user') as string);
   return (
     <>
-      <Flex width="100%">
+      <Flex width="100%" className='nav-tryittar'>
         <Button
+          className='nav-tryittar-button'
           width="90%"
           padding="25px 0"
           textAlign="center"

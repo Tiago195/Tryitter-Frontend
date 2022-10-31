@@ -1,7 +1,7 @@
 import { Box, Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 import { AiOutlineEllipsis, AiOutlineHeart } from 'react-icons/ai';
-import { IUser } from './Profile';
+import { IUser } from '../pages/Profile';
 
 export interface IPost {
   postId: number,
@@ -15,12 +15,16 @@ type Props = {
   post: IPost
 }
 
-export const Post = ({ post }: Props) => {
+const styles = {
+  gap: ['0px', '10px', '20px']
+};
+
+export const Post = () => {
   return (
-    <Flex gap="10px" flexDirection="column" padding="10px" borderBottom="1px" borderTop="1px" borderColor="gray.700">
+    <Flex gap={styles.gap} flexDirection="column" padding="10px" borderBottom="1px" borderTop="1px" borderColor="gray.700">
 
       <Flex justifyContent="space-between">
-        <Flex gap="10px">
+        <Flex gap={styles.gap}>
           <Text>UserName</Text>
           <Text color="gray.500" fontWeight="100">@User</Text>
         </Flex>
@@ -30,7 +34,7 @@ export const Post = ({ post }: Props) => {
       </Flex>
 
       <Box>
-        <Text fontSize="1.2rem">
+        <Text fontSize={['0.8rem', '1rem', '1.2rem']}>
           Lorem ipsum dolor sit amet,
           consectetur adipisicing elit.
           Molestias, magnam quae laboriosam pariatur repudiandae sed dicta amet alias consequatur nam vel.
