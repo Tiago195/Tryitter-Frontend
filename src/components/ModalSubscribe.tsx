@@ -1,7 +1,7 @@
-import { Box, Button, FormControl, FormHelperText, FormLabel, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, Toast, useDisclosure, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, FormControl, FormHelperText, FormLabel, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, Toast, useDisclosure, useToast } from '@chakra-ui/react';
 import logo from './logo.svg';
 
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/axios';
 
@@ -17,33 +17,42 @@ type Props = {
   setUser: any
 }
 
+export type Modules = {
+  moduloId: number,
+  name: string,
+}
+
 export const ModalSubscribe = ({ view: { isOpen, onOpen, onClose }, otherView, setUser }: Props) => {
-  // const {  } = useDisclosure();
+  const [modules, setModules] = useState<Modules[]>([]);
   const toast = useToast();
   const navigation = useNavigate();
   const email = useRef<HTMLInputElement>(null);
   const name = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   const arroba = useRef<HTMLInputElement>(null);
+  const modulo = useRef<HTMLSelectElement>(null);
+  // const [modulo, setModulo] = useState('');
   const changeView = () => {
     onClose();
     otherView.onOpen();
   };
 
   const createAccount = async () => {
-    // console.log(email, name, password);
 
     const body = {
       email: email.current?.value,
       name: name.current?.value,
       password: password.current?.value,
       arroba: arroba.current?.value,
+      moduloId: modulo.current?.value
     };
     try {
       const token = await (await api.post('/user', body)).data;
-      delete body.password;
-      setUser((old: any) => ({ ...old, ...body, token }));
-      localStorage.setItem('user', JSON.stringify({ ...body, token }));
+      const user = await (await api.get(`/user/${body.arroba}`)).data;
+      delete user.password;
+
+      setUser({ ...user, token });
+      localStorage.setItem('user', JSON.stringify({ ...user, token }));
       navigation('/');
       onClose();
     } catch (er) {
@@ -58,6 +67,13 @@ export const ModalSubscribe = ({ view: { isOpen, onOpen, onClose }, otherView, s
       });
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const modules = await (await api.get('/module')).data;
+      setModules(modules);
+    })();
+  }, []);
 
   return (
     <>
@@ -84,14 +100,23 @@ export const ModalSubscribe = ({ view: { isOpen, onOpen, onClose }, otherView, s
               <FormLabel>Password</FormLabel>
               <Input ref={password} placeholder='Password' />
             </FormControl>
-            <FormControl>
-              <FormLabel>Nome</FormLabel>
-              <Input ref={name} placeholder='Nome' />
-            </FormControl>
+            <Flex alignItems="center">
+              <FormControl>
+                <FormLabel>Nome</FormLabel>
+                <Input ref={name} placeholder='Nome' />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Modulo</FormLabel>
+                <Select ref={modulo} placeholder='Selecione o modulo'>
+                  {modules.map(module => (
+                    <option value={module.moduloId} key={module.moduloId}>{module.name}</option>
+                  ))}
+                </Select>
+              </FormControl>
+            </Flex>
             <FormControl>
               <InputGroup>
                 <InputLeftElement>@</InputLeftElement>
-                {/* <FormLabel>Arroba</FormLabel> */}
                 <Input ref={arroba} placeholder='Arroba' />
               </InputGroup>
               <FormHelperText>É por esse nome que as pessoas vão te encontrar</FormHelperText>

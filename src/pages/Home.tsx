@@ -33,7 +33,7 @@ export const Home = ({ user }: Props) => {
   }, []);
 
   return (
-    <Box minH="100vh" fontSize="xl" flex="2">
+    <Box minH="100vh" maxW={['100vw', '100vw', '60vw']} fontSize="xl" flex="2">
 
       <Flex padding="10px" justifyContent="space-between">
         <Text>Página inicial</Text>

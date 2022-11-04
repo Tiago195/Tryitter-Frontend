@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { BiHomeSmile, BiHash } from 'react-icons/bi';
 import { BsPerson } from 'react-icons/bs';
 import { AiOutlineEllipsis } from 'react-icons/ai';
-import { Button, Box, Text, Flex, Image, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
+import { Button, Box, Text, Flex, Image, Menu, MenuButton, MenuList, MenuItem, Avatar } from '@chakra-ui/react';
 
 import logo from './logo.svg';
 import { Login } from './Login';
@@ -90,15 +90,21 @@ export const Nav = ({ user, setUser }: Props) => {
                 justifyContent="space-around"
                 bg="none"
               >
-                <Flex alignItems="center" justifyContent="space-around" w="100%" >
-                  <Flex flexDirection="column" gap="1px" alignItems="flex-start">
-                    <Text>{user.name}</Text>
-                    <Text color="gray.500" fontWeight="100">@{user.arroba}</Text>
-                  </Flex>
-
-                  <Box >
-                    <AiOutlineEllipsis fontSize="1.5rem" />
+                <Flex gap="10px" justifyContent="space-around" w="100%" >
+                  <Box w="40px">
+                    <Avatar src={user.img} />
                   </Box>
+                  <Flex alignItems="center" gap="10px">
+
+                    <Flex flexDirection="column" gap="1px" alignItems="flex-start">
+                      <Text>{user.name}</Text>
+                      <Text color="gray.500" fontWeight="100">@{user.arroba}</Text>
+                    </Flex>
+
+                    <Box >
+                      <AiOutlineEllipsis fontSize="1.5rem" />
+                    </Box>
+                  </Flex>
                 </Flex>
 
               </MenuButton>
