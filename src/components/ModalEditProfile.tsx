@@ -1,16 +1,19 @@
 import { Box, Button, Flex, FormControl, FormHelperText, FormLabel, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, useDisclosure } from '@chakra-ui/react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
 import { IUser } from '../pages/Profile';
 import { api } from '../services/axios';
 import { Modules } from './ModalSubscribe';
 import { HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
+
 
 type Props = {
-  user: IUser
+  user: IUser,
+  setUser: (param: IUser) => void
 }
 
-export const ModalEditProfile = ({ user }: Props) => {
+export const ModalEditProfile = ({ user, setUser }: Props) => {
   const { onOpen, isOpen, onClose } = useDisclosure();
   const [modules, setModules] = useState<Modules[]>([]);
   const [showPassword, setshowPassword] = useState(false);
@@ -20,7 +23,9 @@ export const ModalEditProfile = ({ user }: Props) => {
   const password = useRef<HTMLInputElement>(null);
   const modulo = useRef<HTMLSelectElement>(null);
   const arroba = useRef<HTMLInputElement>(null);
-  const [img, setImg] = useState(user.img);
+  const [img, setImg] = useState<any>(user.img);
+  const [base64, setBase64] = useState<string>(user.img);
+  const navigator = useNavigate();
 
   useEffect(() => {
     setImg(user.img);
@@ -33,10 +38,10 @@ export const ModalEditProfile = ({ user }: Props) => {
     })();
   }, []);
 
-  const changeImg = ({ target }: any) => {
+  const changeImg = async ({ target }: any) => {
     if (target.files != null) {
-
-      setImg(URL.createObjectURL(target.files.item(0) as Blob));
+      setImg(URL.createObjectURL(target.files[0] as Blob));
+      setBase64(await convertToBase64(target.files[0]));
     }
   };
 
@@ -45,26 +50,49 @@ export const ModalEditProfile = ({ user }: Props) => {
     onClose();
   };
 
-  const saveChanges = async () => {
-    // onClose();
-    try {
+  const convertToBase64 = (file: any): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      // console.log(img);
+      fileReader.readAsDataURL(file);
 
-      const token = JSON.parse(localStorage.getItem('user') as string).token;
+      fileReader.onload = () => {
+        resolve(fileReader.result as string);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
+
+  const saveChanges = async () => {
+    try {
+      const userStorage = JSON.parse(localStorage.getItem('user') as string);
 
       const body = {
         email: email.current?.value,
         password: password.current?.value,
         name: name.current?.value,
-        modulo: modulo.current?.value,
-        img: img,
+        moduloId: modulo.current?.value,
+        img: base64.replace(/^data:image\/(png|jpg);base64,/, ''),
         arroba: arroba.current?.value
       };
-      const data = await (await api.put(`/user/${user.userId}`, body, { headers: { Authorization: 'Bearer' + token } })).data;
-      console.log(data);
+
+      const data = await (await api.put(`/user/${user.userId}`, body, { headers: { Authorization: 'Bearer ' + userStorage.token } })).data;
+
+      const local = { ...userStorage, ...data };
+
+      localStorage.setItem('user', JSON.stringify(local));
+
+      navigator(`/profile/${data.arroba}`);
+      window.location.reload();
+      // console.log(local);
+      // setUser(local);
+      // onClose();
     } catch (error) {
       console.log(error);
     }
-
   };
 
   return (

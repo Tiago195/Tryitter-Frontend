@@ -34,10 +34,9 @@ export const Explorer = () => {
       // const news = await (await axios.get('https://newsapi.org/v2/top-headlines?sources=google-news-br&apiKey=f65a607c167340dd806bc49da8680942')).data;
       const t = await (await api.get('/user')).data;
       setUsers(t);
-      console.log(t);
       // setNews(news.articles);
     })();
-    console.log(news);
+    // console.log(news);
   }, []);
 
   const search = ({ target }: any) => {

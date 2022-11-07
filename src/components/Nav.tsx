@@ -39,7 +39,6 @@ export const Nav = ({ user, setUser }: Props) => {
   };
   // const token = localStorage.getItem('token');
 
-  console.log(user);
   return (
     <Flex className='nav' minW="20vw" maxW="20vw" flex="0.5" gap="20px" flexDirection="column" borderRight="1px" borderColor="gray.700">
 
@@ -62,7 +61,10 @@ export const Nav = ({ user, setUser }: Props) => {
               <Text className='nav-texts'>Explorar</Text>
             </Flex>
 
-            <Flex cursor="pointer" {...style.flexIcons} onClick={() => navigate(`/profile/${user.arroba}`)}>
+            <Flex cursor="pointer" {...style.flexIcons} onClick={() => {
+              navigate(`/profile/${user.arroba}`);
+              window.location.reload();
+            }}>
               <BsPerson {...style.icon} />
               <Text className='nav-texts'>Perfil</Text>
             </Flex>

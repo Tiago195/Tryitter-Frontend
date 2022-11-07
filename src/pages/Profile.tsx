@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Center, Divider, Flex, Image, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
 import { ColorModeSwitcher } from '../components/ColorModeSwitcher';
 import { useNavigate } from 'react-router-dom';
@@ -37,12 +37,13 @@ export const Profile = () => {
     modulo: { moduloId: 0, name: '' }
   });
   const navigate = useNavigate();
+  const userStorage = JSON.parse(localStorage.getItem('user') as string);
 
   useEffect(() => {
     (async () => {
       try {
         const data = await (await api.get(`/user/${arroba}`)).data;
-        console.log(data);
+        // console.log(data);
         setUser(data);
       } catch (error) {
         navigate('/notFound');
@@ -71,7 +72,9 @@ export const Profile = () => {
           <Box padding="5px" w="150px">
             <Avatar size="2xl" name={user.name} src={user.img} />
           </Box>
-          <ModalEditProfile user={user} />
+          {userStorage.arroba === user.arroba && (
+            <ModalEditProfile setUser={setUser} user={user} />
+          )}
         </Flex>
         <Text>{user.email}</Text>
         <Text color="gray.500" fontWeight="100" fontSize="1rem">@{user.arroba}</Text>
