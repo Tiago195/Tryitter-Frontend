@@ -27,9 +27,9 @@ export const Home = ({ user }: Props) => {
 
   useEffect(() => {
     (async () => {
-      const data = await (await api.get('/posts')).data;
+      const data = await (await api.get('/post')).data;
       setPosts(data);
-    });
+    })();
   }, []);
 
   return (
@@ -42,13 +42,10 @@ export const Home = ({ user }: Props) => {
       <Box display={['none', 'none', 'flex']}>
         <InputTryitar />
       </Box>
-      {/* {posts.map(e => (
-      ))} */}
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
+      {posts.map(e => (
+        <Post key={e.postId} post={e} user={e.user} />
+      ))}
+
     </Box >
   );
 };

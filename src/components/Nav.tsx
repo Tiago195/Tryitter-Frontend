@@ -94,7 +94,7 @@ export const Nav = ({ user, setUser }: Props) => {
               >
                 <Flex gap="10px" justifyContent="space-around" w="100%" >
                   <Box w="40px">
-                    <Avatar src={user.img} />
+                    <Avatar name={user.name} src={user.img} />
                   </Box>
                   <Flex alignItems="center" gap="10px">
 

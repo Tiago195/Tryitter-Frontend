@@ -32,7 +32,7 @@ export const App = () => {
           <Routes>
             <Route path='/' element={<Home user={user} />} />
             <Route path='/explorer' element={<Explorer />} />
-            <Route path='/profile/:arroba' element={<Profile />} />
+            <Route path='/profile/:arroba' element={<Profile user={user} setUser={setUser} />} />
           </Routes>
         </Box>
       </BrowserRouter>

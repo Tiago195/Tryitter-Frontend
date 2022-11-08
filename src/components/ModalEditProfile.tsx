@@ -1,4 +1,4 @@
-import { Box, Button, Flex, FormControl, FormHelperText, FormLabel, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, useDisclosure } from '@chakra-ui/react';
+import { Avatar, Box, Button, Flex, FormControl, FormHelperText, FormLabel, Image, Input, InputGroup, InputLeftElement, InputRightElement, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Progress, Select, Text, useDisclosure } from '@chakra-ui/react';
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { BiArrowBack } from 'react-icons/bi';
 import { IUser } from '../pages/Profile';
@@ -11,10 +11,12 @@ import { useNavigate } from 'react-router-dom';
 type Props = {
   user: IUser,
   setUser: (param: IUser) => void
+  setUserProfile: Dispatch<SetStateAction<IUser>>
 }
 
-export const ModalEditProfile = ({ user, setUser }: Props) => {
+export const ModalEditProfile = ({ user, setUser, setUserProfile }: Props) => {
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const [loading, setLoading] = useState(false);
   const [modules, setModules] = useState<Modules[]>([]);
   const [showPassword, setshowPassword] = useState(false);
   const handleClick = () => setshowPassword(!showPassword);
@@ -68,6 +70,7 @@ export const ModalEditProfile = ({ user, setUser }: Props) => {
 
   const saveChanges = async () => {
     try {
+      setLoading(true);
       const userStorage = JSON.parse(localStorage.getItem('user') as string);
 
       const body = {
@@ -82,22 +85,26 @@ export const ModalEditProfile = ({ user, setUser }: Props) => {
       const data = await (await api.put(`/user/${user.userId}`, body, { headers: { Authorization: 'Bearer ' + userStorage.token } })).data;
 
       const local = { ...userStorage, ...data };
+      delete local.posts;
 
       localStorage.setItem('user', JSON.stringify(local));
 
       navigator(`/profile/${data.arroba}`);
-      window.location.reload();
+      // window.location.reload();
       // console.log(local);
-      // setUser(local);
-      // onClose();
+      setUser(local);
+      setUserProfile((old) => ({ ...old, ...local }));
+      onClose();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <>
-      <Button onClick={onOpen} borderRadius="25px" border="1px solid white" _light={{ bg: 'none' }}>Editar Perfil</Button>
+      <Button onClick={onOpen} borderRadius="25px" border="1px solid white" _light={{ borderColor: 'black' }}>Editar Perfil</Button>
       <Modal
         isOpen={isOpen}
         onClose={close}
@@ -106,12 +113,17 @@ export const ModalEditProfile = ({ user, setUser }: Props) => {
         <ModalContent padding="10px">
           <ModalHeader display="flex" gap="10px" justifyContent="space-between">
             <Text as="h1">Editar Perfil </Text>
-            <Button onClick={saveChanges}>Salvar</Button>
+            <Flex gap="10px">
+              <Button colorScheme='red' onClick={onClose}>Cancelar</Button>
+              <Button onClick={saveChanges}>Salvar</Button>
+            </Flex>
           </ModalHeader>
           <ModalBody display="flex" flexDirection="column" gap="20px">
             <FormControl>
-              <FormLabel cursor="pointer" width="150px" h="150px" borderRadius="100%" overflow="hidden">
-                <Image src={img} />
+              <FormLabel cursor="pointer" w="150px" h="150px">
+                {/* <Box> */}
+                <Avatar fontSize="80px" w="100%" h="100%" size="2x1" name={user.name} src={img} />
+                {/* </Box> */}
               </FormLabel>
               <Input onChange={changeImg} type="file" display="none" />
             </FormControl>
@@ -150,12 +162,7 @@ export const ModalEditProfile = ({ user, setUser }: Props) => {
               {/* </FormControl> */}
             </InputGroup>
           </ModalBody>
-          {/* <ModalFooter display="flex" flexDirection="column" gap="50px">
-            <Button w="100%" borderRadius="25px" onClick={login}>Entrar</Button>
-            <Text display="inline-flex" gap="10px">Não tem uma conta?
-              <Text color='#2FC18C'><Text cursor="pointer" onClick={changeView}>Inscreva-se</Text></Text>
-            </Text>
-          </ModalFooter> */}
+          {loading && (<Progress size="xs" isIndeterminate />)}
         </ModalContent>
       </Modal>
     </>

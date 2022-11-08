@@ -31,12 +31,11 @@ export const Explorer = () => {
 
   useEffect(() => {
     (async () => {
-      // const news = await (await axios.get('https://newsapi.org/v2/top-headlines?sources=google-news-br&apiKey=f65a607c167340dd806bc49da8680942')).data;
+      const news = await (await axios.get('https://newsapi.org/v2/top-headlines?sources=google-news-br&apiKey=f65a607c167340dd806bc49da8680942')).data;
       const t = await (await api.get('/user')).data;
       setUsers(t);
-      // setNews(news.articles);
+      setNews(news.articles);
     })();
-    // console.log(news);
   }, []);
 
   const search = ({ target }: any) => {

@@ -26,7 +26,7 @@ export const ModalTryitar = () => {
 
       >
         <ModalOverlay />
-        <ModalContent p={3}>
+        <ModalContent p={3} h="50vh">
           <ModalCloseButton />
           <ModalHeader>{user.email}</ModalHeader>
           <InputTryitar />
