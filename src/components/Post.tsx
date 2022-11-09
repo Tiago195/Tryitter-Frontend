@@ -30,6 +30,11 @@ export const Post = ({ post, user }: Props) => {
     window.location.reload();
   };
 
+  const likeTryit = async (id: number) => {
+    await api.post(`/like/${id}`, user, { headers: { Authorization: 'Bearer ' + userStorage.token } });
+    window.location.reload();
+  };
+
   return (
     <Flex padding="10px" borderBottom="1px" borderTop="1px" borderColor="gray.700">
       <Box transform="translateY(17px)">
@@ -62,7 +67,9 @@ export const Post = ({ post, user }: Props) => {
         </Box>
 
         <Flex marginTop="5px" align="center" gap="15px" color="gray.500">
-          <AiOutlineHeart />
+          <Button bg="none" onClick={() => likeTryit(post.postId)}>
+            <AiOutlineHeart />
+          </Button>
           <Text fontWeight="100" fontSize="1rem">{post.likes}</Text>
         </Flex>
 
